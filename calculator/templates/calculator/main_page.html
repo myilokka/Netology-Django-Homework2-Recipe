@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Рецепты</title>
+</head>
+<h1>Рецепты</h1>
+<body>
+{% for key, value in dishes.items %}
+   <p>
+       <a href="{{key}}?servings=1">{{ value }} </a>
+   </p>
+{% endfor %}
+</body>
+</html>
+
