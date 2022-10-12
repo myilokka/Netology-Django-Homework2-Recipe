@@ -1,42 +1,38 @@
 from django.shortcuts import render
 
+DATA = {
+    'omlet': {
+        'яйца, шт': 2,
+        'молоко, л': 0.1,
+        'соль, ч.л.': 0.5,
+
+    },
+    'pasta': {
+        'макароны, г': 0.3,
+        'сыр, г': 0.05,
+    },
+    'buter': {
+        'хлеб, ломтик': 1,
+        'колбаса, ломтик': 1,
+        'сыр, ломтик': 1,
+        'помидор, ломтик': 1,
+    },
+    # можете добавить свои рецепты ;)
+}
+
 
 def main_page(request):
-    context = {'dishes': {'omlet': 'Омлет',
-                          'pasta': 'Паста',
-                          'buter': 'Бутерброд'}}
+    context = {'dishes': {k: k for k in DATA.keys()}}
     return render(request, 'calculator/main_page.html', context)
 
 
-def omlet(request):
+def dish_view(request, dish):
+    context = {}
     number = int(request.GET.get('servings', 1))
-    context = {
-        'dish': 'Омлет',
-        'recipe': {
-            'яйца, шт': 2*number,
-            'молоко, л': round(0.1*number, 2),
-            'соль, ч.л.': round(0.5*number, 2), }}
-    return render(request, 'calculator/index.html', context)
-
-
-def pasta(request):
-    number = int(request.GET.get('servings', 1))
-    context = {
-        'dish': 'Паста',
-        'recipe': {
-            'макароны, г': round(number*0.3, 2),
-            'сыр, г': round(number*0.05, 2), }}
-    return render(request, 'calculator/index.html', context)
-
-
-def buter(request):
-    number = int(request.GET.get('servings', 1))
-    context = {
-        'dish': 'Бутерброд',
-        'recipe': {
-            'хлеб, ломтик': number,
-            'колбаса, ломтик': number,
-            'сыр, ломтик': number,
-            'помидор, ломтик': number, }}
+    for key, value in DATA.items():
+        if dish == key:
+            context = {
+                'dish': dish,
+                'recipe': {k: round(v*number, 2) for (k, v) in value.items()}}
     return render(request, 'calculator/index.html', context)
 
